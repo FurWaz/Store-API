@@ -55,7 +55,7 @@ export class Product {
             name: obj.name,
             description: obj.description,
             price: obj.price,
-            app: typeof(obj.app) === 'number'? obj.app : obj.app.id,
+            app: typeof(obj.app) === 'number'? obj.app : obj.app?.id,
             usersCartProducts: obj.usersCartProducts?.map((c: any) => (typeof(c) === 'object')? c.id: c) as number[] || [],
             usersProducts: obj.usersProducts?.map((p: any) => (typeof(p) === 'object')? p.id: p) as number[] || []
         };

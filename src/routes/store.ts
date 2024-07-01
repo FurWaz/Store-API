@@ -1,14 +1,15 @@
+import { prisma } from 'index.ts';
 import express from 'express';
 import Joi from 'joi';
 import { respond, respondError } from 'tools/Responses.ts';
 import * as controller from '../controllers/store.ts';
 import { Product } from 'models/Product.ts';
 import { getPaginationResult, getRequestPagination } from 'tools/Pagination.ts';
-import { prisma } from 'index.ts';
+import { verifyAdmin } from 'middleware/verifyAdmin.ts';
 const router = express.Router();
 
 // Create a store product
-router.post('/product', async (req, res) => {
+router.post('/product', verifyAdmin, async (req, res) => {
     /**
      * #swagger.tags = ['Store']
      * #swagger.description = 'Create a store product'
@@ -22,7 +23,7 @@ router.post('/product', async (req, res) => {
         price: Joi.number().required(),
         appId: Joi.number().optional()
     });
-    const { error } = schema.validate(req.params);
+    const { error } = schema.validate(req.body);
     if (error) return respondError(res, error);
 
     const { name, description, price, appId } = req.body;
@@ -34,7 +35,7 @@ router.post('/product', async (req, res) => {
 });
 
 // Remove a store product
-router.delete('/product/:id', async (req, res) => {
+router.delete('/product/:id', verifyAdmin, async (req, res) => {
     /**
      * #swagger.tags = ['Store']
      * #swagger.description = 'Remove a store product'

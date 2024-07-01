@@ -2,7 +2,6 @@ import type { Request, Response } from 'express';
 import express from 'express';
 
 import { auth } from 'middleware/auth.ts';
-import { verifyAdmin } from 'middleware/VerifyAdmin.ts';
 import routerDocs from './docs.ts';
 import routerAuth from './auth.ts';
 import routerCartProducts from './cartProducts.ts';
@@ -25,6 +24,6 @@ router.use('/user', routerUser);
 router.use('/cart', auth, routerCartProducts);
 router.use('/checkout', auth, routerCheckout);
 router.use('/products', auth, routerUserProducts);
-router.use('/store', auth, verifyAdmin, routerStore);
+router.use('/store', auth, routerStore);
 
 export default router;

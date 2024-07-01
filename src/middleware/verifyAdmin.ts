@@ -19,22 +19,28 @@ export async function verifyAdmin(req: Request, res: Response, next: NextFunctio
             throw HTTPError.Unauthorized();
         }
 
-        fetch(`https://${Config.mainAPIHost}/users/${user.furwazId}`).then(async (res) => {
+        fetch(`https://${Config.mainAPIHost}/users/${user.furwazId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${Config.appKey}`
+            }
+        }).then(async (res) => {
             const json: any = await res.json();
+            
             if (json.error) {
                 console.debug("Rejecting admin request : user not found in furwaz")
                 throw HTTPError.Unauthorized();
             }
+            const user: any = json.data;
 
-            console.log("User roles : ", json.roles)
-
-            if (!json.roles.includes(1)) { // admin role
+            if (!user.roles.includes(1)) { // admin role
                 console.debug("Rejecting admin request : user is not an admin")
                 throw HTTPError.Forbidden();
             }
 
             next();
-        });
+        }).catch((err) => { respondError(res, err) });
     } catch (err) {
         respondError(res, err);
         return;
