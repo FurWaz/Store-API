@@ -1,0 +1,13 @@
+{
+    "Created":  "${resource} created successfully",
+    "Updated":  "${resource} updated successfully",
+    "Deleted":  "${resource} deleted successfully",
+    "Fetched":  "${resource} fetched successfully",
+    "Accepted":  "${resource} deleted successfully",
+    "Generated":  "${resource} fetched successfully",
+    "NotFound": "${resource} not found",
+    "Added":    "${resource} added successfully",
+    "Removed":  "${resource} removed successfully",
+    "TokenRefreshed": "Token refreshed successfully",
+    "TokenVerified": "Token verified successfully"
+}

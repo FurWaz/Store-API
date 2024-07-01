@@ -1,0 +1,10 @@
+{
+    "User": "User",
+    "Product": "Product",
+    "Cart": "Cart",
+    "Checkout": "Checkout",
+    "Token": "Token",
+    "Portal": "Portal",
+    "UserProduct": "User product",
+    "CartProduct": "Cart product"
+}

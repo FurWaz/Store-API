@@ -1,0 +1,172 @@
+// Prisma schema for the database
+// This file is used to generate the prisma client and the database schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// Represents a user
+// -> id (the user id)
+// -> FurWaz Id (Id of the user on main FurWaz API)
+// -> firstName (the user's first name)
+// -> lastName (the user's last name)
+// -> email (the user's email)
+// -> address (the user's address)
+// -> city (the user's city)
+// -> country (the user's country)
+// -> postalCode (the user's postal code)
+model User {
+    id            Int            @id @default(autoincrement())
+    furwazId      Int            @unique
+    
+    firstName     String?        @db.VarChar(64)
+    lastName      String?        @db.VarChar(64)
+    email         String?        @db.VarChar(64)
+    address       String?        @db.VarChar(128)
+    city          String?        @db.VarChar(64)
+    country       String?        @db.VarChar(64)
+    postalCode    String?        @db.VarChar(16)
+
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+
+    cartProducts  CartProduct[]
+    userProducts  UserProduct[]
+    checkouts     Checkout[]
+}
+
+// Represents a product
+// -> id (the product id)
+// -> name (the product name)
+// -> description (the product description)
+// -> price (the product price)
+// -> appId (the main FurWaz API's app id of the product)
+model Product {
+    id                 Int                @id @default(autoincrement())
+    name               String             @db.VarChar(64)
+    description        String             @db.Text
+    price              Float              @db.Float
+    appId              Int?               @db.Int
+
+    createdAt          DateTime           @default(now())
+    updatedAt          DateTime           @updatedAt
+
+    usersProducts      UserProduct[]
+    checkouts          CheckoutProduct[]
+    usersCartProducts  CartProduct[]
+}
+
+// Represents a checkout session
+// -> id (the checkout session id)
+// -> userId (the user id)
+// -> statusId (id of the status of the session)
+// -> intentId (id of the stripe payment intent)
+// -> firstName (the user's first name)   (person infos copy at checkout moment)
+// -> lastName (the user's last name)     (person infos copy at checkout moment)
+// -> email (the user's email)            (person infos copy at checkout moment)
+// -> address (the user's address)        (person infos copy at checkout moment)
+// -> city (the user's city)              (person infos copy at checkout moment)
+// -> country (the user's country)        (person infos copy at checkout moment)
+// -> postalCode (the user's postal code) (person infos copy at checkout moment)
+model Checkout {
+    id         Int                @id @default(autoincrement())
+    userId     Int                @db.Int
+    statusId   Int
+    intentId   String             @unique @db.VarChar(64)
+    
+    firstName  String?            @db.VarChar(64)
+    lastName   String?            @db.VarChar(64)
+    email      String?            @db.VarChar(64)
+    address    String?            @db.VarChar(128)
+    city       String?            @db.VarChar(64)
+    country    String?            @db.VarChar(64)
+    postalCode String?            @db.VarChar(16)
+    amount     Float              @db.Float
+    
+    createdAt  DateTime           @default(now())
+    updatedAt  DateTime           @updatedAt
+
+    user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+    products   CheckoutProduct[]
+    status     CheckoutStatus     @relation(fields: [statusId], references: [id])
+}
+
+// Represents a user's bought product
+// -> userId (the cart/user id)
+// -> productId (the product id)
+// -> quantity (the number of products)
+model UserProduct {
+    userId     Int       @db.Int
+    productId  Int       @db.Int
+    quantity   Int       @default(1)
+
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+
+    user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    product    Product   @relation(fields: [productId], references: [id])
+
+    @@id([userId, productId])
+}
+
+// Represents a user's current cart
+// -> id (the cart to products association id)
+// -> userId (the cart's user id)
+// -> productId (the product id)
+// -> quantity (the number of products)
+model CartProduct {
+    userId     Int       @db.Int
+    productId  Int       @db.Int
+    quantity   Int       @default(1)
+
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+
+    user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    product    Product   @relation(fields: [productId], references: [id])
+
+    @@id([userId, productId])
+}
+
+// Represents a product in a checkout
+// -> id (the id of the checkout product)
+// -> checkoutId (the checkout id)
+// -> productId (the product id)
+// -> quantity (the number of products)
+// -> price (the price of the product at the time of the checkout)
+model CheckoutProduct {
+    checkoutId  Int        @db.Int
+    productId   Int        @db.Int
+    quantity    Int        @db.Int
+    price       Float      @db.Float
+
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+
+    checkout    Checkout   @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
+    product     Product    @relation(fields: [productId], references: [id])
+
+    @@id([checkoutId, productId])
+}
+
+// Represents a checkout status
+// -> id (the checkout status id)
+// -> name (the checkout status name)
+// <=== Statuses ===>
+// -> Pending (the checkout is started but not paid yet)
+// -> Paid (the checkout is paid and is being processed)
+// -> Done (the checkout is all done)
+model CheckoutStatus {
+    id         Int        @id @default(autoincrement())
+    name       String     @unique @db.VarChar(64)
+
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+
+    checkouts  Checkout[]
+}

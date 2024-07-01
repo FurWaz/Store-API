@@ -1,0 +1,9 @@
+{
+    "InternalServerError": "Internal server error.",
+    "InvalidToken": "Invalid token.",
+    "ExpiredToken": "Expired token.",
+    "BadRequest": "Bad request.",
+    "AlreadyExists": "${resource} already exists.",
+    "Unauthorized": "Unauthorized.",
+    "EnhanceYourCalm": "Enhance your calm."
+}
