@@ -12,10 +12,14 @@ export class CheckoutStatus {
     }
 
     private async loadStatus() {
-        const status = await prisma.checkoutStatus.findFirst({ where: { name: this.name } })
-            ?? await prisma.checkoutStatus.create({ data: { name: this.name } });
-        this.id = status.id;
-        this.listeners.forEach(l => l(this));
+        try {
+            const status = await prisma.checkoutStatus.findFirst({ where: { name: this.name } })
+                ?? await prisma.checkoutStatus.create({ data: { name: this.name } });
+            this.id = status.id;
+            this.listeners.forEach(l => l(this));
+        } catch (err) {
+            console.error("Error : Cannot load status " + this.name + "\n" + err);
+        }
     }
 }
 

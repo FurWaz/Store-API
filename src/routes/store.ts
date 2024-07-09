@@ -16,7 +16,6 @@ router.post('/product', verifyAdmin, async (req, res) => {
      * #swagger.operationId = 'createStoreProduct'
      * #swagger.security = [{ ApiKeyAuth: [] }]
      */
-
     const schema = Joi.object({
         name: Joi.string().required(),
         description: Joi.string().required(),
@@ -42,7 +41,6 @@ router.delete('/product/:id', verifyAdmin, async (req, res) => {
      * #swagger.operationId = 'removeStoreProduct'
      * #swagger.security = [{ ApiKeyAuth: [] }]
      */
-
     const schema = Joi.object({
         id: Joi.number().required()
     });
@@ -66,7 +64,6 @@ router.get('/products', async (req, res) => {
      * #swagger.operationId = 'getStoreProducts'
      * #swagger.security = [{ ApiKeyAuth: [] }]
      */
-
     try {
         const pag = getRequestPagination(req);
         const products = await controller.getProducts(pag);
