@@ -7,7 +7,7 @@ import express from 'express';
 import HTTPError from 'errors/HTTPError.ts';
 import { TokenUtils } from 'tools/Token.ts';
 import { generateToken, getUserInfos } from 'tools/Portal.ts'
-import { PrivateUser, User } from 'models/User.ts';
+import { PrivateUser } from 'models/User.ts';
 
 router.post('/generate', async (req, res) => {
     /**
@@ -35,7 +35,7 @@ router.get('/token', async (req, res) => {
 
         if (portalToken) {
             const portalUserInfos = await getUserInfos(portalToken);
-            const userInfos = await User.create(portalUserInfos.id);
+            const userInfos = await controller.getOrCreate(portalUserInfos.id);
             const token = await controller.createUserToken(userInfos);
             return respond(res, Token.MESSAGES.CREATED, {token, user: userInfos});
         }

@@ -1,4 +1,3 @@
-import { prisma } from "index.ts";
 import Lang from "tools/Lang.ts";
 import { buildResourceMessages } from "tools/Model.ts";
 
@@ -20,22 +19,7 @@ export class User {
         ...buildResourceMessages(Lang.GetText(
             Lang.CreateTranslationContext('models', 'User')
         ))
-};
-
-    public static async create(furwazId: number): Promise<PrivateUser> {
-        return User.makePrivate(await prisma.user.create({
-            data: {
-                furwazId
-            }
-        }));
-    }
-
-    public static async getAsPrivate(id: number): Promise<PrivateUser> {
-        return User.makePrivate(await prisma.user.findUnique({
-            where: { id },
-            include: User.privateIncludes
-        }));
-    }
+    };
 
     public static makePrivate(obj: any): PrivateUser {
         if (!obj) return obj;
