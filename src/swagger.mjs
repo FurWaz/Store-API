@@ -63,12 +63,12 @@ async function generateJSONFile() {
 
             const infos = {
                 info: {
-                    title: 'FurWaz API Documentation',
-                    description: 'Documentation for the FurWaz API',
+                    title: 'FurWaz Store API Documentation',
+                    description: 'Documentation for the FurWaz Store API',
                     version: '1.0.0',
                     contact: {
                         name: 'FurWaz',
-                        url: 'https://furwaz.fr',
+                        url: 'https://store.furwaz.fr',
                         email: 'contact@furwaz.fr'
                     }
                 },

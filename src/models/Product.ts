@@ -7,6 +7,7 @@ export interface PrivateProduct {
     description: string;
     price: number;
     app: number;
+    appId: number;
     usersCartProducts: number[];
     usersProducts: number[];
 }
@@ -17,6 +18,7 @@ export interface PublicProduct {
     description: string;
     price: number;
     app: number;
+    appId: number;
 }
 
 export class Product {
@@ -26,7 +28,7 @@ export class Product {
         checkouts: true
     };
     public static publicIncludes = {
-        // nothing for now
+        
     };
 
     public static MESSAGES = {
@@ -43,7 +45,8 @@ export class Product {
             name: obj.name,
             description: obj.description,
             price: obj.price,
-            app: typeof(obj.app) === 'number'? obj.app : obj.app.id
+            app: typeof(obj.app) === 'number'? obj.app : obj.app?.id,
+            appId: obj.appId
         };
     }
 
@@ -56,6 +59,7 @@ export class Product {
             description: obj.description,
             price: obj.price,
             app: typeof(obj.app) === 'number'? obj.app : obj.app?.id,
+            appId: obj.appId,
             usersCartProducts: obj.usersCartProducts?.map((c: any) => (typeof(c) === 'object')? c.id: c) as number[] || [],
             usersProducts: obj.usersProducts?.map((p: any) => (typeof(p) === 'object')? p.id: p) as number[] || []
         };

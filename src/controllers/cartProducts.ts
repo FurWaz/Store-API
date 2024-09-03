@@ -19,19 +19,8 @@ export async function addCartProduct(userId: number, productId: number, quantity
     }));
 }
 
-export async function removeCartProduct(userId: number, productId: number, quantity: number = 1): Promise<PrivateCartProduct|null> {
-    const existingCartProduct = await prisma.cartProduct.findUnique({
-        where: { userId_productId: { userId, productId } }
-    });
-    if (existingCartProduct === null) return null;
-    if (existingCartProduct.quantity > 1) {
-        return CartProduct.makePrivate(await prisma.cartProduct.update({
-            where: { userId_productId: { userId, productId } },
-            data: { quantity: existingCartProduct.quantity - quantity }
-        }))
-    }
-    await prisma.cartProduct.delete({ where: { userId_productId: { userId, productId } } });
-    return null;
+export async function removeCartProduct(userId: number, productId: number) {
+    return await prisma.cartProduct.delete({ where: { userId_productId: { userId, productId } } });
 }
 
 export async function setCartProductQuantity(userId: number, productId: number, quantity: number): Promise<PrivateCartProduct|null> {

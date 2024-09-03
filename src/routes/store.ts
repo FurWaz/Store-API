@@ -9,7 +9,7 @@ import { verifyAdmin } from 'middleware/verifyAdmin.ts';
 const router = express.Router();
 
 // Create a store product
-router.post('/product', verifyAdmin, async (req, res) => {
+router.post('/products', verifyAdmin, async (req, res) => {
     /**
      * #swagger.tags = ['Store']
      * #swagger.description = 'Create a store product'
@@ -34,7 +34,7 @@ router.post('/product', verifyAdmin, async (req, res) => {
 });
 
 // Remove a store product
-router.delete('/product/:id', verifyAdmin, async (req, res) => {
+router.delete('/products/:id', verifyAdmin, async (req, res) => {
     /**
      * #swagger.tags = ['Store']
      * #swagger.description = 'Remove a store product'

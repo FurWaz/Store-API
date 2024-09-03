@@ -24,6 +24,6 @@ router.use('/user', routerUser);
 router.use('/cart', auth, routerCartProducts);
 router.use('/checkout', auth, routerCheckout);
 router.use('/products', auth, routerUserProducts);
-router.use('/store', auth, routerStore);
+router.use('/store', routerStore);
 
 export default router;

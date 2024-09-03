@@ -24,7 +24,11 @@ export function respondError(res: Response, err: Error|unknown) {
     } else if (err instanceof Joi.ValidationError) {
         res.status(400).json({ error: err.message, field: err.details[0].path[0] });
     } else {
-        console.error(err);
+        if (typeof err === 'object') {
+            console.error(JSON.stringify(err));
+        } else {
+            console.error(err);
+        }
         const tradContext = Lang.CreateTranslationContext('errors', 'InternalServerError');
         res.status(500).json({ error: Lang.GetText(tradContext) });
     }

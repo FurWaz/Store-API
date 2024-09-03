@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "FurWaz API Documentation",
-    "description": "Documentation for the FurWaz API",
+    "title": "FurWaz Store API Documentation",
+    "description": "Documentation for the FurWaz Store API",
     "version": "1.0.0",
     "contact": {
       "name": "FurWaz",
-      "url": "https://furwaz.fr",
+      "url": "https://store.furwaz.fr",
       "email": "contact@furwaz.fr"
     }
   },
@@ -191,6 +191,43 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Cart"
+        ],
+        "description": "Add a user cart product",
+        "operationId": "addCartProduct",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -453,7 +490,7 @@
         ]
       }
     },
-    "/store/product": {
+    "/store/products": {
       "post": {
         "tags": [
           "Store"
@@ -493,9 +530,26 @@
             "ApiKeyAuth": []
           }
         ]
+      },
+      "get": {
+        "tags": [
+          "Store"
+        ],
+        "description": "Get all store products",
+        "operationId": "getStoreProducts",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
-    "/store/product/{id}": {
+    "/store/products/{id}": {
       "delete": {
         "tags": [
           "Store"
@@ -510,25 +564,6 @@
             "type": "string"
           }
         ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
-      }
-    },
-    "/store/products": {
-      "get": {
-        "tags": [
-          "Store"
-        ],
-        "description": "Get all store products",
-        "operationId": "getStoreProducts",
         "responses": {
           "default": {
             "description": ""
@@ -584,6 +619,10 @@
           "type": "number",
           "example": 0
         },
+        "appId": {
+          "type": "number",
+          "example": 0
+        },
         "usersCartProducts": {
           "type": "array",
           "example": [
@@ -624,6 +663,10 @@
           "example": 0
         },
         "app": {
+          "type": "number",
+          "example": 0
+        },
+        "appId": {
           "type": "number",
           "example": 0
         }

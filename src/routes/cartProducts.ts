@@ -73,6 +73,35 @@ router.get('/:productId', async (req, res) => {
     }
 });
 
+// Add a user cart product
+router.post('/:productId', async (req, res) => {
+    /**
+     * #swagger.tags = ['Cart']
+     * #swagger.description = 'Add a user cart product'
+     * #swagger.operationId = 'addCartProduct'
+     * #swagger.security = [{ ApiKeyAuth: [] }]
+     */
+    const schema = Joi.object({
+        productId: Joi.number().required(),
+        quantity: Joi.number().min(1).optional()
+    });
+    const { error } = schema.validate({...req.params, ...req.body});
+    if (error) return respondError(res, error);
+
+    try {
+        const userId = res.locals.token.id;
+        const productId = parseInt(req.params.productId);
+        const quantity = req.body.quantity;
+
+        const product = await controller.addCartProduct(userId, productId, quantity);
+        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND);
+        respond(res, CartProduct.MESSAGES.FETCHED, product);
+    } catch (err) {
+        respondError(res, err);
+        return;
+    }
+});
+
 // Update a user cart product
 router.patch('/:productId', async (req, res) => {
     /**

@@ -22,7 +22,7 @@ export async function removeProduct(id: number): Promise<boolean> {
 export async function getProducts(paginationInfos: PaginationInfos): Promise<Product[]> {
     const products = await prisma.product.findMany({
         ...getPrismaPagination(paginationInfos),
-        include: Product.privateIncludes
+        include: Product.publicIncludes
     });
-    return products.map(Product.makePrivate);
+    return products.map(Product.makePublic);
 }
