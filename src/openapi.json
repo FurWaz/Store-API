@@ -110,6 +110,23 @@
       }
     },
     "/user/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get my user account",
+        "operationId": "getMyUser",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
       "delete": {
         "tags": [
           "Users"
@@ -121,25 +138,6 @@
             "description": ""
           }
         }
-      }
-    },
-    "/user/profile": {
-      "delete": {
-        "tags": [
-          "Users"
-        ],
-        "description": "Delete my user profile",
-        "operationId": "deleteUserProfile",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
       }
     },
     "/cart/": {

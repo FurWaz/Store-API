@@ -15,13 +15,13 @@ const stripe = new Stripe(Config.security.stripeKey, {
     }
 });
 
-type PersonalInfos = {firstName: string, lastName: string, address: string, city: string, country: string, postalCode: string};
+type PersonalInfos = {firstName: string, lastName: string, email: string, phone: string, address: string, city: string, country: string, postalCode: string};
 export async function createPayementIntent(userId: number, infos: PersonalInfos, saveInfos: boolean) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user)
         throw new HTTPError(
-            User.MESSAGES.NOT_FOUND.status,
-            User.MESSAGES.NOT_FOUND.message
+            User.MESSAGES.NOT_FOUND().status,
+            User.MESSAGES.NOT_FOUND().message
         );
     const cartProducts = await prisma.cartProduct.findMany({
         where: { userId },
@@ -34,9 +34,12 @@ export async function createPayementIntent(userId: number, infos: PersonalInfos,
             data: {
                 firstName: infos.firstName,
                 lastName: infos.lastName,
+                email: infos.email,
+                phone: infos.phone,
                 address: infos.address,
                 city: infos.city,
-                postalCode: infos.postalCode
+                postalCode: infos.postalCode,
+                country: infos.country
             }
         });
     }
@@ -58,10 +61,11 @@ export async function createPayementIntent(userId: number, infos: PersonalInfos,
                 quantity: p.quantity,
                 price: p.product.price
             })) },
-            email: user.email,
             amount: price,
             firstName: infos.firstName,
             lastName: infos.lastName,
+            email: user.email,
+            phone: user.phone,
             address: infos.address,
             city: infos.city,
             postalCode: infos.postalCode,
@@ -95,8 +99,8 @@ export async function stripeWebhook(key: string, rawBody: string) {
     });
     if (checkout === null)
         throw new HTTPError(
-            Checkout.MESSAGES.NOT_FOUND.status,
-            Checkout.MESSAGES.NOT_FOUND.message
+            Checkout.MESSAGES.NOT_FOUND().status,
+            Checkout.MESSAGES.NOT_FOUND().message
         );
 
     if (status === CheckoutStatuses.SUCCEEDED) {
@@ -107,12 +111,23 @@ export async function stripeWebhook(key: string, rawBody: string) {
 }
 
 export async function getCheckoutStatus(intentId: string): Promise<CheckoutStatus> {
-    const checkout = await prisma.checkout.findFirst({ where: { intentId }, include: { status: true } });
+    const checkout = await prisma.checkout.findFirst({ where: { intentId }, include: Checkout.privateIncludes });
     if (checkout === null)
         throw new HTTPError(
-            Checkout.MESSAGES.NOT_FOUND.status,
-            Checkout.MESSAGES.NOT_FOUND.message
+            Checkout.MESSAGES.NOT_FOUND().status,
+            Checkout.MESSAGES.NOT_FOUND().message
         );
     
     return (CheckoutStatuses as any)[checkout.status.name.toUpperCase()].name;
+}
+
+export async function getCheckout(id: string): Promise<Checkout> {
+    const checkout = await prisma.checkout.findFirst({ where: { intentId: id }, include: Checkout.privateIncludes });
+    if (checkout === null)
+        throw new HTTPError(
+            Checkout.MESSAGES.NOT_FOUND().status,
+            Checkout.MESSAGES.NOT_FOUND().message
+        );
+
+    return Checkout.makePrivate(checkout);
 }

@@ -20,9 +20,9 @@ router.get('/', (req: Request, res: Response) => {
 
 router.use('/docs', routerDocs);
 router.use('/auth', routerAuth);
-router.use('/user', routerUser);
+router.use('/user', auth, routerUser);
 router.use('/cart', auth, routerCartProducts);
-router.use('/checkout', auth, routerCheckout);
+router.use('/checkout', routerCheckout);
 router.use('/products', auth, routerUserProducts);
 router.use('/store', routerStore);
 

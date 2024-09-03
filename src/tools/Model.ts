@@ -4,13 +4,13 @@ import { ResponseMessage } from "./Responses.ts";
 
 export function buildResourceMessages(resource: string) {
     return {
-        CREATED:   buildCreateMessage(resource),
-        UPDATED:   buildUpdateMessage(resource),
-        DELETED:   buildDeleteMessage(resource),
-        FETCHED:   buildFetchMessage(resource),
-        NOT_FOUND: buildNotFoundMessage(resource),
-        ADDED:     buildMessage(resource, 'Added', HTTP.OK),
-        REMOVED:   buildMessage(resource, 'Removed', HTTP.OK)
+        CREATED:   () => buildCreateMessage(resource),
+        UPDATED:   () => buildUpdateMessage(resource),
+        DELETED:   () => buildDeleteMessage(resource),
+        FETCHED:   () => buildFetchMessage(resource),
+        NOT_FOUND: () => buildNotFoundMessage(resource),
+        ADDED:     () => buildMessage(resource, 'Added', HTTP.OK),
+        REMOVED:   () => buildMessage(resource, 'Removed', HTTP.OK)
     };
 }
 

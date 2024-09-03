@@ -4,10 +4,11 @@ import { respond, respondError } from 'tools/Responses.ts';
 import Lang from 'tools/Lang.ts';
 import Joi from 'joi';
 import { Checkout } from 'models/Checkout.ts';
+import { auth } from 'middleware/auth.ts';
 const router = express.Router();
 
 // Start checkout process
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     /**
      * #swagger.tags = ['Checkout']
      * #swagger.description = 'Start a checkout process with user infos'
@@ -17,6 +18,8 @@ router.post('/', async (req, res) => {
     const schema = Joi.object({
         firstName: Joi.string().required(),
         lastName: Joi.string().required(),
+        email: Joi.string().email().required(),
+        phone: Joi.string().required(),
         address: Joi.string().required(),
         city: Joi.string().required(),
         postalCode: Joi.string().required(),
@@ -33,6 +36,8 @@ router.post('/', async (req, res) => {
             {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
+                email: req.body.email,
+                phone: req.body.phone,
                 address: req.body.address,
                 city: req.body.city,
                 postalCode: req.body.postalCode,
@@ -52,7 +57,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get checkout status
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
     /**
      * #swagger.tags = ['Checkout']
      * #swagger.description = 'Get the checkout status'
@@ -68,8 +73,8 @@ router.get('/:id', async (req, res) => {
     const id = req.params.id;
         
     try {
-        const status = await controller.getCheckoutStatus(id);
-        respond(res, Checkout.MESSAGES.FETCHED, status);
+        const status = await controller.getCheckout(id);
+        respond(res, Checkout.MESSAGES.FETCHED(), status);
     } catch (err) {
         respondError(res, err);
     }

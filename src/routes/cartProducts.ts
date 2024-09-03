@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
         const pag = getRequestPagination(req);
         const products = await controller.getCartProducts(userId, pag);
         const pagination = await getPaginationResult(pag, async () => await prisma.cartProduct.count({ where: { userId } }));
-        respond(res, CartProduct.MESSAGES.FETCHED, { products, pagination });
+        respond(res, CartProduct.MESSAGES.FETCHED(), { products, pagination });
     } catch (err) {
         respondError(res, err);
         return;
@@ -39,8 +39,8 @@ router.delete('/', async (req, res) => {
     try {
         const userId = res.locals.token.id;
         const removed = await controller.removeAllCartProducts(userId);
-        if (!removed) return respondError(res, CartProduct.MESSAGES.NOT_FOUND);
-        respond(res, CartProduct.MESSAGES.DELETED);
+        if (!removed) return respondError(res, CartProduct.MESSAGES.NOT_FOUND());
+        respond(res, CartProduct.MESSAGES.DELETED());
     } catch (err) {
         respondError(res, err);
         return;
@@ -65,8 +65,8 @@ router.get('/:productId', async (req, res) => {
         const userId = res.locals.token.id;
         const productId = parseInt(req.params.productId);
         const product = await controller.getCartProduct(userId, productId);
-        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND);
-        respond(res, CartProduct.MESSAGES.FETCHED, CartProduct);
+        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND());
+        respond(res, CartProduct.MESSAGES.FETCHED(), CartProduct);
     } catch (err) {
         respondError(res, err);
         return;
@@ -94,8 +94,8 @@ router.post('/:productId', async (req, res) => {
         const quantity = req.body.quantity;
 
         const product = await controller.addCartProduct(userId, productId, quantity);
-        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND);
-        respond(res, CartProduct.MESSAGES.FETCHED, product);
+        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND());
+        respond(res, CartProduct.MESSAGES.FETCHED(), product);
     } catch (err) {
         respondError(res, err);
         return;
@@ -122,8 +122,8 @@ router.patch('/:productId', async (req, res) => {
         const productId = parseInt(req.params.productId);
         const quantity = req.body.quantity;
         const product = await controller.setCartProductQuantity(userId, productId, quantity);
-        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND);
-        respond(res, CartProduct.MESSAGES.UPDATED, product);
+        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND());
+        respond(res, CartProduct.MESSAGES.UPDATED(), product);
     } catch (err) {
         respondError(res, err);
         return;
@@ -148,8 +148,8 @@ router.delete('/:productId', async (req, res) => {
         const userId = res.locals.token.id;
         const productId = parseInt(req.params.productId);
         const product = await controller.removeCartProduct(userId, productId);
-        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND);
-        respond(res, CartProduct.MESSAGES.DELETED);
+        if (!product) return respondError(res, CartProduct.MESSAGES.NOT_FOUND());
+        respond(res, CartProduct.MESSAGES.DELETED());
     } catch (err) {
         respondError(res, err);
         return;

@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
         const pag = getRequestPagination(req);
         const products = await controller.getUserProducts(userId, pag);
         const pagination = await getPaginationResult(pag, async () => await prisma.userProduct.count({ where: { userId } }));
-        respond(res, UserProduct.MESSAGES.FETCHED, { products, pagination });
+        respond(res, UserProduct.MESSAGES.FETCHED(), { products, pagination });
     } catch (err) {
         respondError(res, err);
         return;
@@ -50,8 +50,8 @@ router.get('/:productId', async (req, res) => {
 
     try {
         const product = await controller.getUserProduct(userId, productId);
-        if (!product) return respondError(res, UserProduct.MESSAGES.NOT_FOUND);
-        respond(res, UserProduct.MESSAGES.FETCHED, product);
+        if (!product) return respondError(res, UserProduct.MESSAGES.NOT_FOUND());
+        respond(res, UserProduct.MESSAGES.FETCHED(), product);
     } catch (err) {
         respondError(res, err);
         return;
@@ -79,8 +79,8 @@ router.patch('/:productId', async (req, res) => {
 
     try {
         const product = await controller.setUserProductQuantity(userId, productId, quantity);
-        if (!product) return respondError(res, UserProduct.MESSAGES.NOT_FOUND);
-        respond(res, UserProduct.MESSAGES.UPDATED, product);
+        if (!product) return respondError(res, UserProduct.MESSAGES.NOT_FOUND());
+        respond(res, UserProduct.MESSAGES.UPDATED(), product);
     } catch (err) {
         respondError(res, err);
         return;
@@ -107,8 +107,8 @@ router.delete('/:productId', async (req, res) => {
     try {
         // one at a time
         const removed = await controller.removeUserProduct(userId, productId);
-        if (!removed) return respondError(res, UserProduct.MESSAGES.NOT_FOUND);
-        respond(res, UserProduct.MESSAGES.DELETED);
+        if (!removed) return respondError(res, UserProduct.MESSAGES.NOT_FOUND());
+        respond(res, UserProduct.MESSAGES.DELETED());
     } catch (err) {
         respondError(res, err);
         return;

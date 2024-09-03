@@ -9,5 +9,6 @@
     "Added":    "${resource} added successfully",
     "Removed":  "${resource} removed successfully",
     "TokenRefreshed": "Token refreshed successfully",
-    "TokenVerified": "Token verified successfully"
+    "TokenVerified": "Token verified successfully",
+    "PayementIntentCreated": "Payement intent created successfully"
 }

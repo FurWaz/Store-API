@@ -17,7 +17,7 @@ router.post('/generate', async (req, res) => {
      */
     try {
         const token = await generateToken();
-        respond(res, Portal.MESSAGES.CREATED, token);
+        respond(res, Portal.MESSAGES.CREATED(), token);
     } catch (err) { respondError(res, err); }
 });
 
@@ -37,7 +37,7 @@ router.get('/token', async (req, res) => {
             const portalUserInfos = await getUserInfos(portalToken);
             const userInfos = await controller.getOrCreate(portalUserInfos.id);
             const token = await controller.createUserToken(userInfos);
-            return respond(res, Token.MESSAGES.CREATED, {token, user: userInfos});
+            return respond(res, Token.MESSAGES.CREATED(), {token, user: userInfos});
         }
 
         if (!authHeader) throw HTTPError.Unauthorized();
@@ -47,7 +47,7 @@ router.get('/token', async (req, res) => {
     
         const data = await TokenUtils.decode(token);
         const newToken = await controller.createUserToken(data as PrivateUser);
-        respond(res, Token.MESSAGES.CREATED, newToken);
+        respond(res, Token.MESSAGES.CREATED(), newToken);
     } catch (err) { respondError(res, err); }
 });
 

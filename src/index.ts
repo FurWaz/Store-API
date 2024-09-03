@@ -9,8 +9,6 @@ import cors from 'cors';
 
 dotenv.config();
 
-console.log("DEBUG : DOT ENV : ", process.env.DATABASE_URL);
-
 const prisma = new PrismaClient(Logger.prismaSettings);
 const app = express();
 Logger.init();
