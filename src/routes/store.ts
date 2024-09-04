@@ -65,9 +65,20 @@ router.get('/products', async (req, res) => {
      * #swagger.operationId = 'getStoreProducts'
      * #swagger.security = [{ ApiKeyAuth: [] }]
      */
+    const schema = Joi.object({
+        page: Joi.number().optional(),
+        limit: Joi.number().optional(),
+        app: Joi.string().optional(),
+        order: Joi.string().optional(),
+    });
+    const { error } = schema.validate(req.query);
+    if (error) return respondError(res, error);
+
     try {
         const pag = getRequestPagination(req);
-        const products = await controller.getProducts(pag);
+        const app = req.query.app ? parseInt(req.query.app as string) : undefined;
+        const order = req.query.order ? req.query.order as string : undefined;
+        const products = await controller.getProducts(pag, app, order);
         const pagination = await getPaginationResult(pag, async () => await prisma.product.count());
         respond(res, Product.MESSAGES.FETCHED(), { products, pagination });
     } catch (err) { respondError(res, err); }
