@@ -11,7 +11,7 @@ const stripe = new Stripe(Config.security.stripeKey, {
     appInfo: {
         name: 'FurWaz API',
         version: '1.0.0',
-        url: 'https://main.apis.furwaz.fr'
+        url: 'https://api.furwaz.com'
     }
 });
 

@@ -68,7 +68,7 @@ async function generateJSONFile() {
                     version: '1.0.0',
                     contact: {
                         name: 'FurWaz',
-                        url: 'https://store.furwaz.fr',
+                        url: 'https://store.furwaz.com',
                         email: 'contact@furwaz.fr'
                     }
                 },

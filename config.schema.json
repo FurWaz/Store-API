@@ -13,7 +13,7 @@
         },
         "host": {
             "type": "string",
-            "default": "main.apis.furwaz.fr"
+            "default": "api.furwaz.com"
         },
         "port": {
             "type": "integer",
@@ -26,17 +26,17 @@
         },
         "webHost": {
             "type": "string",
-            "default": "furwaz.fr",
+            "default": "furwaz.com",
             "description": "The host address of the web page (used for emails and CORS)"
         },
         "mainAPIHost": {
             "type": "string",
-            "default": "main.apis.furwaz.fr",
+            "default": "api.furwaz.com",
             "description": "The host address of the main API"
         },
         "appKey": {
             "type": "string",
-            "default": "Get from https://furwaz.fr/my/apps",
+            "default": "Get from https://furwaz.com/my/apps",
             "description": "The key used to authenticate this app on the main API"
         },
         "security": {
@@ -72,7 +72,7 @@
                 },
                 "from": {
                     "type": "string",
-                    "default": "FurWaz <noreply@furwaz.fr>"
+                    "default": "FurWaz <noreply@furwaz.com>"
                 },
                 "host": {
                     "type": "string",
