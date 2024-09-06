@@ -69,7 +69,7 @@ async function generateJSONFile() {
                     contact: {
                         name: 'FurWaz',
                         url: 'https://store.furwaz.com',
-                        email: 'contact@furwaz.fr'
+                        email: 'contact@furwaz.com'
                     }
                 },
                 host: Config.host,

@@ -22,7 +22,7 @@
         },
         "mailContact": {
             "type": "string",
-            "default": "contact@furwaz.fr"
+            "default": "contact@furwaz.com"
         },
         "webHost": {
             "type": "string",
