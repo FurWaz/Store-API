@@ -46,13 +46,15 @@ model User {
 // -> name (the product name)
 // -> description (the product description)
 // -> price (the product price)
-// -> appId (the main FurWaz API's app id of the product)
+// -> category (the product category)
 model Product {
     id                 Int                @id @default(autoincrement())
-    name               String             @db.VarChar(64)
+    title              String             @db.VarChar(64)
     description        String             @db.Text
     price              Float              @db.Float
-    appId              Int?               @db.Int
+    categoryId         Int?               @db.Int
+    typeId             Int?               @db.Int
+    image              String?            @db.VarChar(128)
 
     createdAt          DateTime           @default(now())
     updatedAt          DateTime           @updatedAt
@@ -60,6 +62,36 @@ model Product {
     usersProducts      UserProduct[]
     checkouts          CheckoutProduct[]
     usersCartProducts  CartProduct[]
+    category           Category?          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    type               ProductType?              @relation(fields: [typeId], references: [id], onDelete: Cascade)
+}
+
+// Represents a product category (app or service)
+// -> id (the category id)
+// -> furwazId (the app id on the main FurWaz API)
+// -> name (the category name)
+model Category {
+    id         Int        @id @default(autoincrement())
+    furwazId   Int        @unique
+    name       String     @unique @db.VarChar(64)
+
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+
+    products   Product[]
+}
+
+// Represents a product type (physical, service, subscription, ...)
+// -> id (the type id)
+// -> name (the type name)
+model ProductType {
+    id         Int        @id @default(autoincrement())
+    name       String     @unique @db.VarChar(64)
+
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+
+    products   Product[]
 }
 
 // Represents a checkout session

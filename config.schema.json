@@ -36,7 +36,7 @@
         },
         "appKey": {
             "type": "string",
-            "default": "Get from https://furwaz.com/my/apps",
+            "default": "Get from https://furwaz.com/account/applications",
             "description": "The key used to authenticate this app on the main API"
         },
         "security": {

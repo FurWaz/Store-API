@@ -1,2 +1,2 @@
-import Config from '../../config.json' assert { type: "json" };
+import Config from '../../config.json' with { type: "json" };
 export default Config;

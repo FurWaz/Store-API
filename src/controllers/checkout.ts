@@ -3,7 +3,7 @@ import { prisma } from 'index.ts';
 import { Checkout } from 'models/Checkout.ts';
 import { User } from 'models/User.ts';
 import Stripe from 'stripe';
-import { CheckoutStatus, CheckoutStatuses } from 'tools/CheckoutStatus.ts';
+import { CheckoutStatus, CheckoutStatuses } from 'models/CheckoutStatus.ts';
 import Config from 'tools/Config.ts';
 import { removeAllCartProducts } from './cartProducts.ts';
 

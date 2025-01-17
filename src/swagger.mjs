@@ -1,4 +1,4 @@
-import Config from '../config.json' assert { type: 'json' };
+import Config from '../config.json' with { type: 'json' };
 import swaggerAutogen from 'swagger-autogen';
 import { URL, fileURLToPath } from 'url';
 import ts from 'typescript';

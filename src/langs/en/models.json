@@ -6,5 +6,7 @@
     "Token": "Token",
     "Portal": "Portal",
     "UserProduct": "User product",
-    "CartProduct": "Cart product"
+    "CartProduct": "Cart product",
+    "Category": "Product category",
+    "Type": "Product type"
 }

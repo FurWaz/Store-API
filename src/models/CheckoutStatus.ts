@@ -21,6 +21,13 @@ export class CheckoutStatus {
             console.error("Error : Cannot load status " + this.name + "\n" + err);
         }
     }
+
+    public async get() {
+        return new Promise<CheckoutStatus>(resolve => {
+            if (this.id !== undefined) resolve(this);
+            else this.listeners.push(resolve);
+        });
+    }
 }
 
 export const CheckoutStatuses = {

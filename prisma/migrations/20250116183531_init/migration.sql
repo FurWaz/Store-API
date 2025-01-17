@@ -5,6 +5,7 @@ CREATE TABLE `User` (
     `firstName` VARCHAR(64) NULL,
     `lastName` VARCHAR(64) NULL,
     `email` VARCHAR(64) NULL,
+    `phone` VARCHAR(16) NULL,
     `address` VARCHAR(128) NULL,
     `city` VARCHAR(64) NULL,
     `country` VARCHAR(64) NULL,
@@ -19,13 +20,39 @@ CREATE TABLE `User` (
 -- CreateTable
 CREATE TABLE `Product` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(64) NOT NULL,
+    `title` VARCHAR(64) NOT NULL,
     `description` TEXT NOT NULL,
     `price` FLOAT NOT NULL,
-    `appId` INTEGER NULL,
+    `categoryId` INTEGER NULL,
+    `typeId` INTEGER NULL,
+    `image` VARCHAR(128) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Category` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `furwazId` INTEGER NOT NULL,
+    `name` VARCHAR(64) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `Category_furwazId_key`(`furwazId`),
+    UNIQUE INDEX `Category_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ProductType` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(64) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `ProductType_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -38,6 +65,7 @@ CREATE TABLE `Checkout` (
     `firstName` VARCHAR(64) NULL,
     `lastName` VARCHAR(64) NULL,
     `email` VARCHAR(64) NULL,
+    `phone` VARCHAR(16) NULL,
     `address` VARCHAR(128) NULL,
     `city` VARCHAR(64) NULL,
     `country` VARCHAR(64) NULL,
@@ -94,6 +122,12 @@ CREATE TABLE `CheckoutStatus` (
     UNIQUE INDEX `CheckoutStatus_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Product` ADD CONSTRAINT `Product_typeId_fkey` FOREIGN KEY (`typeId`) REFERENCES `ProductType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Checkout` ADD CONSTRAINT `Checkout_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
