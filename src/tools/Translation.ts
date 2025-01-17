@@ -24,7 +24,7 @@ export function findBestTranslation<Type>(getter: TranslationGetter<Type|null>):
     const result = getter(requestLang);
     if (result) return result;
 
-    for (const languageCode in translationLanguages.filter(lang => lang !== requestLang)) {
+    for (const languageCode of translationLanguages.filter(lang => lang !== requestLang)) {
         const result = getter(languageCode);
         if (result) return result;
     }
@@ -38,7 +38,7 @@ export async function findBestTranslationAsync<Type>(getter: TranslationGetterAs
     const result = await getter(requestLang);
     if (result) return result;
 
-    for (const languageCode in translationLanguages.filter(lang => lang !== requestLang)) {
+    for (const languageCode of translationLanguages.filter(lang => lang !== requestLang)) {
         const result = await getter(languageCode);
         if (result) return result;
     }

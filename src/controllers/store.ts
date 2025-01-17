@@ -17,6 +17,24 @@ export async function addCategory(name: string, furwazId: number): Promise<Priva
     return category;
 }
 
+export async function updateCategory(id: number, name?: string, furwazId?: number): Promise<PrivateCategory> {
+    const category = await prisma.productCategory.findUnique({ where: { id } });
+    if (!category) throw new HTTPError(
+        Category.MESSAGES.NOT_FOUND().status,
+        Category.MESSAGES.NOT_FOUND().message
+    );
+
+    const updatedCategory = Category.makePrivate(await prisma.productCategory.update({
+        where: { id },
+        data: {
+            name: name ?? category.name,
+            furwazId: furwazId ?? category.furwazId
+        }
+    }));
+
+    return updatedCategory;
+}
+
 export async function removeCategory(id: number): Promise<boolean> {
     return (await prisma.productCategory.delete({ where: { id } })) !== null;
 }
@@ -84,6 +102,71 @@ export async function addProduct(titles: TranslatedText, descriptions: Translate
 
     return Product.makePrivate({ ...product, title, description });
 }
+
+export async function updateProduct(id: number, titles?: TranslatedText, descriptions?: TranslatedText, price?: number, categoryId?: number, typeId?: number, image?: string): Promise<PrivateProduct> {
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) throw new HTTPError(
+        Product.MESSAGES.NOT_FOUND().status,
+        Product.MESSAGES.NOT_FOUND().message
+    );
+
+    if (categoryId) {
+        const category = await prisma.productCategory.findUnique({ where: { id: categoryId } });
+        if (!category) throw new HTTPError(
+            Category.MESSAGES.NOT_FOUND().status,
+            Category.MESSAGES.NOT_FOUND().message
+        )
+    }
+
+    if (typeId) {
+        const type = await prisma.productType.findUnique({ where: { id: typeId } });
+        if (!type) throw new HTTPError(
+            Type.MESSAGES.NOT_FOUND().status,
+            Type.MESSAGES.NOT_FOUND().message
+        );
+    }
+
+    const updatedProduct = Product.makePrivate(await prisma.product.update({
+        where: { id },
+        data: {
+            price: price ?? product.price,
+            categoryId: categoryId ?? product.categoryId,
+            typeId: typeId ?? product.typeId,
+            image: image ?? product.image
+        },
+        include: Product.privateIncludes
+    }));
+
+    if (titles) {
+        const titleLangs = Object.keys(titles);
+        for (const lang of titleLangs) {
+            await prisma.productTitle.upsert({
+                where: { productId_language: { productId: id, language: lang } },
+                update: { text: titles[lang] },
+                create: { language: lang, text: titles[lang], productId: id }
+            });
+        }
+    }
+
+    if (descriptions) {
+        const descriptionLangs = Object.keys(descriptions);
+        for (const lang of descriptionLangs) {
+            await prisma.productDescription.upsert({
+                where: { productId_language: { productId: id, language: lang } },
+                update: { text: descriptions[lang] },
+                create: { language: lang, text: descriptions[lang], productId: id }
+            });
+        }
+    }
+
+    const title = await findBestTranslationAsync<string>(async lang =>
+        (await prisma.productTitle.findUnique({ where: { productId_language: { productId: id, language: lang } }}))?.text ?? null) ?? '';
+    const description = await findBestTranslationAsync<string>(async lang =>
+        (await prisma.productDescription.findUnique({ where: { productId_language: { productId: id, language: lang } }}))?.text ?? null) ?? '';
+
+    return Product.makePrivate({ ...updatedProduct, title, description });
+}
+
 
 export async function removeProduct(id: number): Promise<boolean> {
     return (await prisma.product.delete({ where: { id } })) !== null;

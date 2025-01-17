@@ -57,6 +57,32 @@ router.get('/categories', async (req, res) => {
     } catch (err) { respondError(res, err); }
 });
 
+// Update a category
+router.patch('/categories/:id', auth, verifyAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Store']
+     * #swagger.description = 'Update a category'
+     * #swagger.operationId = 'updateCategory'
+     * #swagger.security = [{ ApiKeyAuth: [] }]
+     */
+    const schema = Joi.object({
+        id: Joi.number().required(),
+        name: Joi.string().optional(),
+        furwazId: Joi.number().optional()
+    });
+    const { error } = schema.validate({ ...req.params, ...req.body });
+    if (error) return respondError(res, error);
+
+    const { name, furwazId } = req.body;
+    const { id } = req.params;
+
+    try {
+        const category = await controller.updateCategory(parseInt(id), name, furwazId);
+        if (!category) return respondError(res, Category.MESSAGES.NOT_FOUND());
+        respond(res, Category.MESSAGES.UPDATED(), { category });
+    } catch (err) { respondError(res, err); }
+});
+
 // Remove a category
 router.delete('/categories/:id', auth, verifyAdmin, async (req, res) => {
     /**
@@ -104,6 +130,36 @@ router.post('/products', auth, verifyAdmin, async (req, res) => {
     try {
         const product = await controller.addProduct(titles, descriptions, price, categoryId, typeId, image);
         respond(res, Product.MESSAGES.CREATED(), { product });
+    } catch (err) { respondError(res, err); }
+});
+
+// Update a store product
+router.patch('/products/:id', auth, verifyAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Store']
+     * #swagger.description = 'Update a store product'
+     * #swagger.operationId = 'updateStoreProduct'
+     * #swagger.security = [{ ApiKeyAuth: [] }]
+     */
+    const schema = Joi.object({
+        id: Joi.number().required(),
+        titles: translatedTextSchema.optional(),
+        descriptions: translatedTextSchema.optional(),
+        price: Joi.number().optional(),
+        categoryId: Joi.number().optional(),
+        typeId: Joi.number().optional(),
+        image: Joi.string().optional()
+    });
+    const { error } = schema.validate({ ...req.params, ...req.body });
+    if (error) return respondError(res, error);
+
+    const { titles, descriptions, price, categoryId, typeId, image } = req.body;
+    const { id } = req.params;
+
+    try {
+        const product = await controller.updateProduct(parseInt(id), titles, descriptions, price, categoryId, typeId, image);
+        if (!product) return respondError(res, Product.MESSAGES.NOT_FOUND());
+        respond(res, Product.MESSAGES.UPDATED(), { product });
     } catch (err) { respondError(res, err); }
 });
 
