@@ -9,6 +9,7 @@ import { verifyAdmin } from 'middleware/verifyAdmin.ts';
 import { auth } from 'middleware/auth.ts';
 import { Category } from 'models/Category.ts';
 import { Type } from 'models/Type.ts';
+import { translatedTextSchema } from 'tools/Translation.ts';
 const router = express.Router();
 
 // Create a category
@@ -88,8 +89,8 @@ router.post('/products', auth, verifyAdmin, async (req, res) => {
      * #swagger.security = [{ ApiKeyAuth: [] }]
      */
     const schema = Joi.object({
-        title: Joi.string().required(),
-        description: Joi.string().required(),
+        titles: translatedTextSchema.required(),
+        descriptions: translatedTextSchema.required(),
         price: Joi.number().required(),
         categoryId: Joi.number().required(),
         typeId: Joi.number().required(),
@@ -98,10 +99,10 @@ router.post('/products', auth, verifyAdmin, async (req, res) => {
     const { error } = schema.validate(req.body);
     if (error) return respondError(res, error);
 
-    const { title, description, price, categoryId, typeId, image } = req.body;
+    const { titles, descriptions, price, categoryId, typeId, image } = req.body;
 
     try {
-        const product = await controller.addProduct(title, description, price, categoryId, typeId, image);
+        const product = await controller.addProduct(titles, descriptions, price, categoryId, typeId, image);
         respond(res, Product.MESSAGES.CREATED(), { product });
     } catch (err) { respondError(res, err); }
 });

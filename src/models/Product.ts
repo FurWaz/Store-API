@@ -33,10 +33,13 @@ export class Product {
     public static privateIncludes = {
         usersCartProducts: true,
         usersProducts: true,
-        checkouts: true
+        checkouts: true,
+        titles: true,
+        descriptions: true
     };
     public static publicIncludes = {
-        
+        titles: true,
+        descriptions: true
     };
 
     public static MESSAGES = {

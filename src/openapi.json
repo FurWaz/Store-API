@@ -157,6 +157,23 @@
             "ApiKeyAuth": []
           }
         ]
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update user informations",
+        "operationId": "updateUserInfos",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/cart/": {
@@ -602,10 +619,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
+                "titles": {
                   "example": "any"
                 },
-                "description": {
+                "descriptions": {
                   "example": "any"
                 },
                 "price": {
