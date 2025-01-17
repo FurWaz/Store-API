@@ -1,0 +1,14 @@
+{
+    "Created":  "${resource} créé avec succès",
+    "Updated":  "${resource} mis à jour avec succès",
+    "Deleted":  "${resource} supprimé avec succès",
+    "Fetched":  "${resource} récupéré avec succès",
+    "Accepted":  "${resource} accepté avec succès",
+    "Generated":  "${resource} généré avec succès",
+    "NotFound": "${resource} non trouvé",
+    "Added":    "${resource} ajouté avec succès",
+    "Removed":  "${resource} retiré avec succès",
+    "TokenRefreshed": "Jeton actualisé avec succès",
+    "TokenVerified": "Jeton vérifié avec succès",
+    "PayementIntentCreated": "Intention de paiement créée avec succès"
+}

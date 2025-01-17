@@ -1,11 +1,14 @@
 import HTTPError from 'errors/HTTPError.ts';
-import { prisma } from 'index.ts';
+import { getRootDir, prisma } from 'index.ts';
 import { Checkout } from 'models/Checkout.ts';
 import { User } from 'models/User.ts';
 import Stripe from 'stripe';
 import { CheckoutStatus, CheckoutStatuses } from 'models/CheckoutStatus.ts';
 import Config from 'tools/Config.ts';
 import { removeAllCartProducts } from './cartProducts.ts';
+import Mailer from 'tools/Mailer.ts';
+import Mail from 'tools/Mail.ts';
+import Formatter from 'tools/Formatter.ts';
 
 const stripe = new Stripe(Config.security.stripeKey, {
     appInfo: {
@@ -105,6 +108,24 @@ export async function stripeWebhook(key: string, rawBody: string) {
 
     if (status === CheckoutStatuses.SUCCEEDED) {
         removeAllCartProducts(checkout.userId);
+    }
+
+    // send a confirmation email
+    if (!checkout.email) {
+        console.error('No email provided for checkout', checkout.id, ', cannot send confirmation email');
+    } else {
+        await Mailer.sendMail(
+            checkout.email,
+            Mail.fromFile(
+                Formatter.formatString('${Lang::mailOrderConfirmation/subject}'),
+                getRootDir() + 'mails/orderConfirmation.html',
+                {
+                    webhost: Config.webHost,
+                    buttonLink: `${Config.webHost}/account/orders?id=${checkout.id}`,
+                    mailto: Config.mailContact
+                }
+            )
+        );
     }
     
     return checkout;

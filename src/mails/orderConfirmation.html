@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> ${Lang::mailOrderConfirmation/subject} </title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif; padding: 1em; margin: 0;">
+    <center>
+        <div style="background-color: #334155; color: #f8fafc; border-radius: 12px; width: fit-content; overflow: hidden;">
+            <center>
+                <div style="padding: 1em;">
+                    <img src="https://${webhost}/img/logo.png" alt="FurWaz Logo" style="width: 100px; height: 100px;">
+                    <h1 style="text-align: center;"> ${Lang::mailOrderConfirmation/subject} </h1>
+                </div>
+            </center>
+            <div style="padding: 1em; margin: 0">
+                <center>
+                    <div style="max-width: 400px; height: fit-content;">
+                        <p style="font-size: large; font-weight: bold;"> ${Lang::mailOrderConfirmation/body1} </p>
+                        <p style="color: #f8fafc;"> ${Lang::mailOrderConfirmation/body2} </p>
+                        <p style="color: #f8fafc;"> ${Lang::mailOrderConfirmation/body3} </p>
+                        <br>
+                        <a
+                            href="${buttonLink}"
+                            style="text-decoration: none;"
+                        >
+                            <div style="background-color: #8b5cf6; color: white; border-radius: 4px; width: fit-content;">
+                                <p style="font-size: large; padding: 1em; font-weight: bold;">
+                                    ${Lang::mailOrderConfirmation/button}
+                                </p>
+                            </div>
+                        </a>
+                        <br>
+                        <p> ${Lang::mailOrderConfirmation/body4} </p>
+                    </div>
+                </center>
+            </div>
+            <br>
+            <center style="background-color: #1e293b; padding: 1em 0em; margin: 0;">
+                <div style="max-width: 400px; height: fit-content;">
+                    <p style="color: #f8fafc;"> ${Lang::mailOrderConfirmation/footer1} </p>
+                    <p style="color: #f8fafc;">
+                        ${Lang::mailOrderConfirmation/footer2}
+                        <a href="mailto:${mailto}" style="color: #8b5cf6;">${mailto}</a>
+                    </p>
+                </div>
+            </center>
+        </div>
+    </center>
+</body>
+</html>

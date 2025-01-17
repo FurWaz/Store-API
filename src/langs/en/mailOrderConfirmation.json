@@ -1,0 +1,10 @@
+{
+    "subject": "Order Confirmation",
+    "body1": "Thank you for placing an order at FurWaz store.",
+    "body2": "Your order has been successfully received and will be delivered as soon as possible.",
+    "body3": "To track the progress of your order, click the button below.",
+    "button": "View Order",
+    "body4": "Thank you for your trust, and see you soon.",
+    "footer1": "This email was sent automatically, please do not reply.",
+    "footer2": "For any questions, please contact us at the following address:"
+}

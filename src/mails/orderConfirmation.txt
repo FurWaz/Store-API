@@ -1,0 +1,3 @@
+${Lang::mailOrderConfirmation/subject}
+${Lang::mailOrderConfirmation/body1}
+${Lang::mailOrderConfirmation/body2}

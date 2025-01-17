@@ -167,7 +167,6 @@ export async function updateProduct(id: number, titles?: TranslatedText, descrip
     return Product.makePrivate({ ...updatedProduct, title, description });
 }
 
-
 export async function removeProduct(id: number): Promise<boolean> {
     return (await prisma.product.delete({ where: { id } })) !== null;
 }

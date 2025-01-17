@@ -1,10 +1,12 @@
 import fs from 'fs';
 import Formatter from './Formatter.ts';
+import { Attachment } from 'nodemailer/lib/mailer/index.js';
 
 interface JSONMail {
     subject: string;
     text: string;
     html: string;
+    attachments?: Attachment[];
 }
 
 export default class Mail {
@@ -13,16 +15,20 @@ export default class Mail {
      * @param subject The mail subject
      * @param path The source HTML file to read mail template from
      * @param assigns The variables to replace in the template
+     * @param attachments The attachments to add to the mail
      * @returns The mail object corresponding to the JSON file
      */
-    public static fromFile(subject: string, path: string, assigns: { [key: string]: string } = {}): Mail {
-        const data = fs.readFileSync(path);
-        const html = Formatter.formatString(data.toString(), assigns);
+    public static fromFile(subject: string, path: string, assigns: { [key: string]: string } = {}, attachments: Attachment[] = []): Mail {
+        const datahtml = fs.readFileSync(path);
+        const datatext = fs.readFileSync(path.replace('.html', '.txt'));
+        const html = Formatter.formatString(datahtml.toString(), assigns);
+        const text = Formatter.formatString(datatext.toString(), assigns);
 
         return Mail.fromJSON({
             subject: Formatter.formatString(subject, assigns),
-            text: html,
-            html: html
+            text: text,
+            html: html,
+            attachments: attachments
         });
     }
 
@@ -39,17 +45,20 @@ export default class Mail {
         return new Mail(
             json.subject as string,
             json.text as string,
-            json.html as string
+            json.html as string,
+            json.attachments || []
         );
     }
 
     public subject: string;
     public text: string;
     public html: string;
+    public attachments: Attachment[];
 
-    public constructor(subject: string, text: string, html: string) {
+    public constructor(subject: string, text: string, html: string, attachments: Attachment[] = []) {
         this.subject = subject;
         this.text = text;
         this.html = html;
+        this.attachments = attachments;
     }
 }

@@ -1,0 +1,12 @@
+{
+    "User": "Utilisateur",
+    "Product": "Produit",
+    "Cart": "Panier",
+    "Checkout": "Paiement",
+    "Token": "Jeton",
+    "Portal": "Portail",
+    "UserProduct": "Produit utilisateur",
+    "CartProduct": "Produit du panier",
+    "Category": "Catégorie de produit",
+    "Type": "Type de produit"
+}

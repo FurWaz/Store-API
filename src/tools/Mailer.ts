@@ -10,17 +10,38 @@ export default class Mailer {
      * @param to Client email address (ex: mail@furwaz.com)
      * @param mail The mail object to send
      */
-    public static sendMail(to: string, mail: Mail) {
-        console.debug('Sending mail to ' + to + ' : [' + mail.subject + ']');
-        this.getTransporter().then(transporter => {
-            transporter.sendMail({
-                from: Config.mail.from,
-                to,
-                subject: mail.subject,
-                html: mail.html,
-                text: mail.text
+    public static async sendMail(to: string, mail: Mail) {
+        const transporter = await this.getTransporter();
+
+        if (!transporter) {
+            console.error('Error : Cannot get mail transporter');
+            return;
+        }
+
+        try {
+            const infos = await new Promise((resolve, reject) => {
+                transporter.sendMail({
+                    from: Config.mail.from,
+                    to,
+                    subject: mail.subject,
+                    html: mail.html,
+                    text: mail.text,
+                    attachments: mail.attachments
+                }, (err, infos) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(infos);
+                });
             });
-        });
+        } catch (err) {
+            console.error('Error : Cannot send mail : ');
+            console.error(`err = ${err}\n${JSON.stringify(err, null, 2)}`);
+            return false;
+        }
+
+        return true;
     }
 
     /**

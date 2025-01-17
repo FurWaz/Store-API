@@ -10,7 +10,6 @@ import routerUserProducts from './userProducts.ts';
 import routerUser from './users.ts';
 import routerStore from './store.ts';
 
-
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {

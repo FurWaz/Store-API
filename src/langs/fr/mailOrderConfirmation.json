@@ -1,0 +1,10 @@
+{
+    "subject": "Confirmation de commande",
+    "body1": "Merci d'avoir passé commande sur le magasin FurWaz.",
+    "body2": "Votre commande à bien été prise en compte, et sera livrée dans les plus brefs délais.",
+    "body3": "Pour suivre l'avancement de votre commande, cliquez sur le bouton ci-dessous.",
+    "button": "Voir la commande",
+    "body4": "Merci de votre confiance, et à bientôt.",
+    "footer1": "Cet email a été envoyé automatiquement, merci de ne pas y répondre.",
+    "footer2": "Pour toute question, merci de nous contacter à l'adresse suivante :"
+}
