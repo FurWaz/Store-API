@@ -62,7 +62,7 @@ model Product {
     usersProducts      UserProduct[]
     checkouts          CheckoutProduct[]
     usersCartProducts  CartProduct[]
-    category           Category?          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    category           ProductCategory?          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     type               ProductType?              @relation(fields: [typeId], references: [id], onDelete: Cascade)
 }
 
@@ -70,7 +70,7 @@ model Product {
 // -> id (the category id)
 // -> furwazId (the app id on the main FurWaz API)
 // -> name (the category name)
-model Category {
+model ProductCategory {
     id         Int        @id @default(autoincrement())
     furwazId   Int        @unique
     name       String     @unique @db.VarChar(64)
