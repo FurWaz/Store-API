@@ -1,6 +1,7 @@
 import { prisma } from "index.ts";
 import { PrivateCartProduct, CartProduct } from "models/CartProduct.ts";
 import { PaginationInfos, getPrismaPagination } from "tools/Pagination.ts";
+import { findBestTranslation } from "tools/Translation.ts";
 
 export async function addCartProduct(userId: number, productId: number, quantity: number = 1): Promise<PrivateCartProduct> {
     const existingCartProduct = await prisma.cartProduct.findUnique({
@@ -49,7 +50,11 @@ export async function getCartProducts(userId: number, paginationInfos: Paginatio
         ...getPrismaPagination(paginationInfos),
         include: CartProduct.privateIncludes
     });
-    return products.map(CartProduct.makePrivate);
+    return products.map((product) => {
+        const title = findBestTranslation<string>(lang => product.product.titles.find((obj: any) => obj.language === lang)?.text ?? null) ?? '';
+        const description = findBestTranslation<string>(lang => product.product.descriptions.find((obj: any) => obj.language === lang)?.text ?? null) ?? '';
+        return CartProduct.makePrivate({ ...product, product: { ...product.product, title, description } });
+    });
 }
 
 export async function getCartProduct(userId: number, productId: number): Promise<PrivateCartProduct|null> {
@@ -58,5 +63,8 @@ export async function getCartProduct(userId: number, productId: number): Promise
         include: CartProduct.privateIncludes
     });
     if (product === null) return null;
-    return CartProduct.makePrivate(product);
+
+    const title = findBestTranslation<string>(lang => product.product.titles.find((obj: any) => obj.language === lang)?.text ?? null) ?? '';
+    const description = findBestTranslation<string>(lang => product.product.descriptions.find((obj: any) => obj.language === lang)?.text ?? null) ?? '';
+    return CartProduct.makePrivate({ ...product, product: { ...product.product, title, description } });
 }

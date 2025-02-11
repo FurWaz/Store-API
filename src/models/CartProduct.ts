@@ -1,5 +1,6 @@
 import Lang from "tools/Lang.ts";
 import { buildResourceMessages } from "tools/Model.ts";
+import { Product } from "./Product.ts";
 
 export interface PrivateCartProduct {
     userId: number;
@@ -10,7 +11,12 @@ export interface PrivateCartProduct {
 
 export class CartProduct {
     public static privateIncludes = {
-        product: true
+        product: {
+            include: {
+                titles: true,
+                descriptions: true
+            }
+        }
     };
 
     public static MESSAGES = {
@@ -25,7 +31,7 @@ export class CartProduct {
         return {
             userId: obj.userId,
             productId: obj.productId,
-            product: obj.product,
+            product: Product.makePublic(obj.product),
             quantity: obj.quantity
         };
     }
